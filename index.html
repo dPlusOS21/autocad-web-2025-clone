@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WebCAD 2025</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='5' fill='%23cf2d2d'/><text x='16' y='23' text-anchor='middle' font-family='Segoe UI,sans-serif' font-weight='700' font-size='20' fill='white'>A</text></svg>">
+<link rel="stylesheet" href="css/style.css">
+<!-- Import map per caricare Three.js dal vendor locale (offline-friendly) -->
+<script type="importmap">
+{
+  "imports": {
+    "three": "./vendor/three/three.module.js",
+    "three/addons/controls/OrbitControls.js": "./vendor/three/controls/OrbitControls.js",
+    "three/addons/exporters/STLExporter.js": "./vendor/three/exporters/STLExporter.js",
+    "three/addons/exporters/OBJExporter.js": "./vendor/three/exporters/OBJExporter.js",
+    "three/addons/exporters/GLTFExporter.js": "./vendor/three/exporters/GLTFExporter.js",
+    "three-mesh-bvh": "./vendor/three-mesh-bvh/index.module.js",
+    "three-bvh-csg": "./vendor/three-bvh-csg/index.module.js"
+  }
+}
+</script>
+</head>
+<body>
+
+<header class="titlebar">
+  <div class="app-logo">
+    <span class="logo-mark">A</span>
+    <span class="app-name">WebCAD</span>
+    <span class="app-version">2025</span>
+  </div>
+  <div class="quick-access">
+    <button class="qa-btn" data-cmd="new" title="Nuovo (Ctrl+N)">
+      <svg viewBox="0 0 16 16"><path d="M3 1 L10 1 L13 4 L13 15 L3 15 Z M10 1 L10 4 L13 4" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/></svg>
+    </button>
+    <button class="qa-btn" data-cmd="open" title="Apri (Ctrl+O)">
+      <svg viewBox="0 0 16 16"><path d="M2 4 L7 4 L8.5 5.5 L14 5.5 L14 13 L2 13 Z" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/></svg>
+    </button>
+    <button class="qa-btn" data-cmd="save" title="Salva (Ctrl+S)">
+      <svg viewBox="0 0 16 16"><path d="M2 2 L12 2 L14 4 L14 14 L2 14 Z M4 2 L4 6 L11 6 L11 2 M4 9 L12 9 L12 14 L4 14 Z" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/></svg>
+    </button>
+    <button class="qa-btn" data-cmd="undo" title="Annulla (Ctrl+Z)">
+      <svg viewBox="0 0 16 16"><path d="M3 7 L7 3 M3 7 L7 11 M3 7 L11 7 Q 14 7 14 10 L14 13" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+    <button class="qa-btn" data-cmd="redo" title="Ripeti (Ctrl+Y)">
+      <svg viewBox="0 0 16 16"><path d="M13 7 L9 3 M13 7 L9 11 M13 7 L5 7 Q 2 7 2 10 L2 13" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+    <button class="qa-btn" data-cmd="samples" title="Apri un esempio (SAMPLE)">
+      <svg viewBox="0 0 16 16"><path d="M2 3 L7 3 L8 4.5 L14 4.5 L14 13 L2 13 Z" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/><text x="5" y="11.5" font-size="5" font-family="sans-serif" fill="currentColor">EX</text></svg>
+    </button>
+  </div>
+  <div class="doc-title" id="docTitle">Disegno1.wcad</div>
+  <div class="window-controls">
+    <button class="wc" id="btnTheme" title="Cambia tema chiaro/scuro">&#x263D;</button>
+    <button class="wc" id="btnFullscreen" title="Schermo intero">&#x26F6;</button>
+  </div>
+</header>
+
+<nav class="ribbon">
+  <div class="ribbon-tabs">
+    <button class="ribbon-tab active" data-tab="home">Home</button>
+    <button class="ribbon-tab" data-tab="insert">Inserisci</button>
+    <button class="ribbon-tab" data-tab="annotate">Annota</button>
+    <button class="ribbon-tab" data-tab="modify">Modifica</button>
+    <button class="ribbon-tab" data-tab="view">Vista</button>
+    <button class="ribbon-tab" data-tab="output">Output</button>
+  </div>
+
+  <div class="ribbon-panels">
+
+    <!-- HOME -->
+    <div class="ribbon-page active" data-page="home">
+      <div class="panel">
+        <div class="panel-body">
+          <button class="tool-btn big" data-tool="line" title="Linea (L)">
+            <svg viewBox="0 0 32 32"><line x1="4" y1="26" x2="28" y2="6"/></svg>
+            <span>Linea</span>
+          </button>
+          <div class="tool-col">
+            <button class="tool-btn" data-tool="polyline" title="Polilinea (PL)">
+              <svg viewBox="0 0 24 24"><polyline points="2,20 8,8 14,16 22,4" fill="none"/></svg>
+              <span>Polilinea</span>
+            </button>
+            <button class="tool-btn" data-tool="circle" title="Cerchio (C)">
+              <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="none"/></svg>
+              <span>Cerchio</span>
+            </button>
+            <button class="tool-btn" data-tool="arc" title="Arco (A)">
+              <svg viewBox="0 0 24 24"><path d="M3 18 A 12 12 0 0 1 21 18" fill="none"/></svg>
+              <span>Arco</span>
+            </button>
+          </div>
+          <div class="tool-col">
+            <button class="tool-btn" data-tool="rectangle" title="Rettangolo (REC)">
+              <svg viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="12" fill="none"/></svg>
+              <span>Rettangolo</span>
+            </button>
+            <button class="tool-btn" data-tool="ellipse" title="Ellisse (EL)">
+              <svg viewBox="0 0 24 24"><ellipse cx="12" cy="12" rx="10" ry="6" fill="none"/></svg>
+              <span>Ellisse</span>
+            </button>
+            <button class="tool-btn" data-tool="point" title="Punto (PO)">
+              <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="2" fill="currentColor"/></svg>
+              <span>Punto</span>
+            </button>
+          </div>
+        </div>
+        <div class="panel-title">Disegna</div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-body">
+          <button class="tool-btn big" data-tool="move" title="Sposta (M)">
+            <svg viewBox="0 0 32 32"><path d="M16 4 L16 28 M4 16 L28 16 M16 4 L12 8 M16 4 L20 8 M16 28 L12 24 M16 28 L20 24 M4 16 L8 12 M4 16 L8 20 M28 16 L24 12 M28 16 L24 20" fill="none"/></svg>
+            <span>Sposta</span>
+          </button>
+          <div class="tool-col">
+            <button class="tool-btn" data-tool="copy" title="Copia (CO)">
+              <svg viewBox="0 0 24 24"><rect x="3" y="3" width="12" height="12" fill="none"/><rect x="9" y="9" width="12" height="12" fill="none"/></svg>
+              <span>Copia</span>
+            </button>
+            <button class="tool-btn" data-tool="rotate" title="Ruota (RO)">
+              <svg viewBox="0 0 24 24"><path d="M20 12 A 8 8 0 1 1 12 4" fill="none"/><polyline points="12,1 12,4 15,4" fill="none"/></svg>
+              <span>Ruota</span>
+            </button>
+            <button class="tool-btn" data-tool="mirror" title="Specchio (MI)">
+              <svg viewBox="0 0 24 24"><line x1="12" y1="2" x2="12" y2="22" stroke-dasharray="2,2"/><polygon points="3,6 9,12 3,18" fill="none"/><polygon points="21,6 15,12 21,18" fill="none"/></svg>
+              <span>Specchio</span>
+            </button>
+          </div>
+          <div class="tool-col">
+            <button class="tool-btn" data-tool="scale" title="Scala (SC)">
+              <svg viewBox="0 0 24 24"><rect x="3" y="3" width="8" height="8" fill="none"/><rect x="11" y="11" width="10" height="10" fill="none"/></svg>
+              <span>Scala</span>
+            </button>
+            <button class="tool-btn" data-tool="offset" title="Offset (O)">
+              <svg viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12" fill="none"/><rect x="2" y="2" width="20" height="20" fill="none" stroke-dasharray="2,2"/></svg>
+              <span>Offset</span>
+            </button>
+            <button class="tool-btn" data-tool="trim" title="Trim (TR)">
+              <svg viewBox="0 0 24 24"><line x1="2" y1="12" x2="22" y2="12"/><line x1="8" y1="3" x2="8" y2="21" stroke-dasharray="2,2"/><line x1="16" y1="3" x2="16" y2="21" stroke-dasharray="2,2"/></svg>
+              <span>Trim</span>
+            </button>
+          </div>
+          <div class="tool-col">
+            <button class="tool-btn" data-tool="extend" title="Estendi (EX)">
+              <svg viewBox="0 0 24 24"><line x1="2" y1="12" x2="18" y2="12"/><line x1="20" y1="3" x2="20" y2="21" stroke-dasharray="2,2"/><polyline points="14,8 18,12 14,16" fill="none"/></svg>
+              <span>Estendi</span>
+            </button>
+            <button class="tool-btn" data-tool="fillet" title="Raccordo (F)">
+              <svg viewBox="0 0 24 24"><path d="M3 21 L3 9 Q 3 3 9 3 L21 3" fill="none"/></svg>
+              <span>Raccordo</span>
+            </button>
+            <button class="tool-btn" data-tool="erase" title="Cancella (E)">
+              <svg viewBox="0 0 24 24"><polygon points="3,17 10,3 21,9 14,21" fill="none"/></svg>
+              <span>Cancella</span>
+            </button>
+          </div>
+        </div>
+        <div class="panel-title">Modifica</div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-body" id="layerQuick">
+          <select id="layerSelect" class="layer-select"></select>
+          <button class="tool-btn small" id="btnLayerProps" title="Proprietà layer">
+            <svg viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="3" fill="none"/><rect x="3" y="11" width="18" height="3" fill="none"/><rect x="3" y="16" width="18" height="3" fill="none"/></svg>
+            <span>Layer</span>
+          </button>
+        </div>
+        <div class="panel-title">Layer</div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-body">
+          <div class="prop-row"><label>Colore</label>
+            <input type="color" id="curColor" value="#ffffff">
+          </div>
+          <div class="prop-row"><label>Spessore</label>
+            <select id="curLineWeight">
+              <option value="0.25">0.25 mm</option>
+              <option value="0.50" selected>0.50 mm</option>
+              <option value="0.70">0.70 mm</option>
+              <option value="1.00">1.00 mm</option>
+              <option value="1.40">1.40 mm</option>
+            </select>
+          </div>
+          <div class="prop-row"><label>Tipo linea</label>
+            <select id="curLineType">
+              <option value="CONTINUOUS">Continua</option>
+              <option value="DASHED">Tratteggiata</option>
+              <option value="DOTTED">Punteggiata</option>
+              <option value="DASHDOT">Tratto-punto</option>
+              <option value="CENTER">Asse</option>
+            </select>
+          </div>
+        </div>
+        <div class="panel-title">Proprietà</div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-body">
+          <button class="tool-btn" data-tool="text" title="Testo (T)">
+            <svg viewBox="0 0 24 24"><text x="4" y="20" font-size="22" font-family="serif" fill="currentColor">A</text></svg>
+            <span>Testo</span>
+          </button>
+          <button class="tool-btn" data-tool="dimension" title="Quota (DIM)">
+            <svg viewBox="0 0 24 24"><line x1="3" y1="6" x2="3" y2="18"/><line x1="21" y1="6" x2="21" y2="18"/><line x1="3" y1="12" x2="21" y2="12"/><polygon points="3,12 7,10 7,14" fill="currentColor"/><polygon points="21,12 17,10 17,14" fill="currentColor"/></svg>
+            <span>Quota</span>
+          </button>
+        </div>
+        <div class="panel-title">Annotazione</div>
+      </div>
+    </div>
+
+    <!-- INSERT -->
+    <div class="ribbon-page" data-page="insert">
+      <div class="panel">
+        <div class="panel-body">
+          <button class="tool-btn" id="btnImportDxf">
+            <svg viewBox="0 0 24 24"><path d="M12 3 L12 16 M7 11 L12 16 L17 11" fill="none"/><line x1="3" y1="21" x2="21" y2="21"/></svg>
+            <span>Importa DXF</span>
+          </button>
+          <button class="tool-btn" id="btnImportImg">
+            <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" fill="none"/><circle cx="9" cy="10" r="2" fill="currentColor"/><polyline points="3,18 9,13 15,18 21,12" fill="none"/></svg>
+            <span>Riferimento</span>
+          </button>
+        </div>
+        <div class="panel-title">Importa</div>
+      </div>
+    </div>
+
+    <!-- ANNOTATE -->
+    <div class="ribbon-page" data-page="annotate">
+      <div class="panel">
+        <div class="panel-body">
+          <button class="tool-btn" data-tool="text">
+            <svg viewBox="0 0 24 24"><text x="4" y="20" font-size="22" font-family="serif" fill="currentColor">A</text></svg>
+            <span>Testo</span>
+          </button>
+          <button class="tool-btn" data-tool="dimension">
+            <svg viewBox="0 0 24 24"><line x1="3" y1="12" x2="21" y2="12"/><polygon points="3,12 7,10 7,14" fill="currentColor"/><polygon points="21,12 17,10 17,14" fill="currentColor"/></svg>
+            <span>Quota lineare</span>
+          </button>
+        </div>
+        <div class="panel-title">Testo &amp; quote</div>
+      </div>
+    </div>
+
+    <!-- MODIFY -->
+    <div class="ribbon-page" data-page="modify">
+      <div class="panel">
+        <div class="panel-body">
+          <button class="tool-btn" data-tool="move"><span>Sposta</span></button>
+          <button class="tool-btn" data-tool="copy"><span>Copia</span></button>
+          <button class="tool-btn" data-tool="rotate"><span>Ruota</span></button>
+          <button class="tool-btn" data-tool="scale"><span>Scala</span></button>
+          <button class="tool-btn" data-tool="mirror"><span>Specchio</span></button>
+          <button class="tool-btn" data-tool="offset"><span>Offset</span></button>
+          <button class="tool-btn" data-tool="trim"><span>Trim</span></button>
+          <button class="tool-btn" data-tool="extend"><span>Estendi</span></button>
+          <button class="tool-btn" data-tool="fillet"><span>Raccordo</span></button>
+          <button class="tool-btn" data-tool="erase"><span>Cancella</span></button>
+        </div>
+        <div class="panel-title">Modifica</div>
+      </div>
+    </div>
+
+    <!-- VIEW -->
+    <div class="ribbon-page" data-page="view">
+      <div class="panel">
+        <div class="panel-body">
+          <button class="tool-btn" id="btnZoomExtents">
+            <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" fill="none"/><polyline points="7,7 12,12 7,12 12,7" fill="none"/><polyline points="17,17 12,12 17,12 12,17" fill="none"/></svg>
+            <span>Zoom tutto</span>
+          </button>
+          <button class="tool-btn" id="btnZoomIn">
+            <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7" fill="none"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/><line x1="16" y1="16" x2="21" y2="21"/></svg>
+            <span>Zoom +</span>
+          </button>
+          <button class="tool-btn" id="btnZoomOut">
+            <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7" fill="none"/><line x1="8" y1="11" x2="14" y2="11"/><line x1="16" y1="16" x2="21" y2="21"/></svg>
+            <span>Zoom -</span>
+          </button>
+        </div>
+        <div class="panel-title">Naviga</div>
+      </div>
+      <div class="panel">
+        <div class="panel-body">
+          <label class="chk"><input type="checkbox" id="chkGrid" checked> Griglia</label>
+          <label class="chk"><input type="checkbox" id="chkAxes" checked> Assi</label>
+          <label class="chk"><input type="checkbox" id="chkUcs" checked> UCS</label>
+        </div>
+        <div class="panel-title">Visualizza</div>
+      </div>
+      <div class="panel">
+        <div class="panel-body">
+          <button class="tool-btn big" id="btnToggle3D" title="Passa a workspace 3D">
+            <svg viewBox="0 0 32 32"><path d="M6 10 L16 4 L26 10 L26 22 L16 28 L6 22 Z M6 10 L16 16 L26 10 M16 16 L16 28" fill="none"/></svg>
+            <span>Workspace 3D</span>
+          </button>
+          <button class="tool-btn big" data-tool="extrude" title="Estrudi (EXT): seleziona entità chiuse e digita altezza">
+            <svg viewBox="0 0 32 32"><rect x="6" y="14" width="14" height="10" fill="none"/><polygon points="6,14 12,8 26,8 20,14" fill="none"/><polygon points="20,14 26,8 26,18 20,24" fill="none"/></svg>
+            <span>Estrudi</span>
+          </button>
+          <div class="tool-col">
+            <button class="tool-btn small" data-view3d="top"><span>Vista Top</span></button>
+            <button class="tool-btn small" data-view3d="front"><span>Front</span></button>
+            <button class="tool-btn small" data-view3d="right"><span>Right</span></button>
+            <button class="tool-btn small" data-view3d="iso"><span>Isometrica</span></button>
+          </div>
+        </div>
+        <div class="panel-title">3D</div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-body">
+          <button class="tool-btn" data-tool="box" title="Box (BOX)">
+            <svg viewBox="0 0 32 32"><polygon points="6,12 16,6 26,12 26,24 16,30 6,24" fill="none"/><polyline points="6,12 16,18 26,12 M16,18 L16,30" fill="none"/></svg>
+            <span>Box</span>
+          </button>
+          <button class="tool-btn" data-tool="sphere" title="Sfera (SPHERE)">
+            <svg viewBox="0 0 32 32"><circle cx="16" cy="16" r="11" fill="none"/><ellipse cx="16" cy="16" rx="11" ry="4" fill="none"/></svg>
+            <span>Sfera</span>
+          </button>
+          <button class="tool-btn" data-tool="cylinder" title="Cilindro (CYL)">
+            <svg viewBox="0 0 32 32"><ellipse cx="16" cy="7" rx="9" ry="3" fill="none"/><ellipse cx="16" cy="25" rx="9" ry="3" fill="none"/><line x1="7" y1="7" x2="7" y2="25"/><line x1="25" y1="7" x2="25" y2="25"/></svg>
+            <span>Cilindro</span>
+          </button>
+          <button class="tool-btn" data-tool="cone" title="Cono (CONE)">
+            <svg viewBox="0 0 32 32"><line x1="16" y1="3" x2="6" y2="26"/><line x1="16" y1="3" x2="26" y2="26"/><ellipse cx="16" cy="26" rx="10" ry="3" fill="none"/></svg>
+            <span>Cono</span>
+          </button>
+          <button class="tool-btn" data-tool="torus" title="Toro (TORUS)">
+            <svg viewBox="0 0 32 32"><ellipse cx="16" cy="16" rx="11" ry="6" fill="none"/><ellipse cx="16" cy="16" rx="5" ry="2.5" fill="none"/></svg>
+            <span>Toro</span>
+          </button>
+          <button class="tool-btn" data-tool="pyramid" title="Piramide (PYR)">
+            <svg viewBox="0 0 32 32"><polygon points="16,3 6,24 26,24" fill="none"/><polyline points="6,24 16,28 26,24 M16,3 L16,28" fill="none"/></svg>
+            <span>Piramide</span>
+          </button>
+          <button class="tool-btn" data-tool="revolve" title="Rivoluzione (REV) — profilo polilinea ruotato attorno a un asse">
+            <svg viewBox="0 0 32 32"><ellipse cx="16" cy="9" rx="10" ry="3" fill="none"/><ellipse cx="16" cy="23" rx="10" ry="3" fill="none"/><path d="M6 9 C6 18 6 23 6 23 M26 9 C26 18 26 23 26 23" fill="none"/><line x1="16" y1="3" x2="16" y2="29" stroke-dasharray="2 2"/></svg>
+            <span>Rivoluzione</span>
+          </button>
+        </div>
+        <div class="panel-title">Primitive 3D</div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-body">
+          <button class="tool-btn" data-tool="union" title="Unione (UNI) — somma i solidi selezionati">
+            <svg viewBox="0 0 32 32"><circle cx="12" cy="16" r="9" fill="rgba(120,170,255,0.18)"/><circle cx="20" cy="16" r="9" fill="rgba(120,170,255,0.18)"/></svg>
+            <span>Unione</span>
+          </button>
+          <button class="tool-btn" data-tool="subtract" title="Sottrazione (SUB) — A meno B">
+            <svg viewBox="0 0 32 32"><defs><mask id="msub"><rect width="32" height="32" fill="white"/><circle cx="20" cy="16" r="9" fill="black"/></mask></defs><circle cx="12" cy="16" r="9" fill="rgba(255,160,160,0.5)" mask="url(#msub)"/><circle cx="20" cy="16" r="9" fill="none"/></svg>
+            <span>Sottrai</span>
+          </button>
+          <button class="tool-btn" data-tool="intersect" title="Intersezione (INT) — solo le parti in comune">
+            <svg viewBox="0 0 32 32"><defs><clipPath id="cint"><circle cx="20" cy="16" r="9"/></clipPath></defs><circle cx="12" cy="16" r="9" fill="none"/><circle cx="20" cy="16" r="9" fill="none"/><circle cx="12" cy="16" r="9" fill="rgba(120,255,160,0.5)" clip-path="url(#cint)"/></svg>
+            <span>Interseca</span>
+          </button>
+        </div>
+        <div class="panel-title">Booleani CSG</div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-body section-panel">
+          <label class="chk"><input type="checkbox" id="chkSection"> Sezione attiva</label>
+          <div class="sec-row">
+            <span class="sec-label">Asse</span>
+            <select id="secAxis">
+              <option value="X">X</option>
+              <option value="Y">Y</option>
+              <option value="Z" selected>Z</option>
+            </select>
+            <button class="tool-btn small" id="secFlip" title="Inverti lato visibile">Flip</button>
+          </div>
+          <div class="sec-row">
+            <span class="sec-label">Pos.</span>
+            <input type="range" id="secPos" min="-100" max="100" step="0.5" value="0">
+            <span id="secPosVal" class="sec-val">0</span>
+          </div>
+        </div>
+        <div class="panel-title">Sezione dinamica</div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-body section-panel">
+          <div class="sec-row">
+            <span class="sec-label">Mat.</span>
+            <select id="matPreset">
+              <option value="pbr" selected>PBR (standard)</option>
+              <option value="phong">Phong (lucido)</option>
+              <option value="flat">Flat (no luce)</option>
+              <option value="wireframe">Wireframe</option>
+            </select>
+          </div>
+          <div class="sec-row">
+            <span class="sec-label">Luce</span>
+            <select id="lightPreset">
+              <option value="studio" selected>Studio</option>
+              <option value="outdoor">Outdoor</option>
+              <option value="minimal">Minimal</option>
+            </select>
+          </div>
+          <div class="sec-row">
+            <span class="sec-label">Sole</span>
+            <input type="range" id="sunInt" min="0" max="3" step="0.05" value="0.85">
+            <span id="sunIntVal" class="sec-val">0.85</span>
+          </div>
+          <label class="chk"><input type="checkbox" id="chkShadows" checked> Ombre</label>
+        </div>
+        <div class="panel-title">Materiali &amp; Luci</div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-body">
+          <button class="tool-btn" id="btnExportStl" title="Esporta solidi 3D in STL">
+            <svg viewBox="0 0 32 32"><polygon points="6,12 16,6 26,12 26,24 16,30 6,24" fill="none"/><text x="10" y="22" font-size="8" font-family="sans-serif" fill="currentColor">STL</text></svg>
+            <span>STL</span>
+          </button>
+          <button class="tool-btn" id="btnExportObj" title="Esporta solidi 3D in OBJ">
+            <svg viewBox="0 0 32 32"><polygon points="6,12 16,6 26,12 26,24 16,30 6,24" fill="none"/><text x="10" y="22" font-size="8" font-family="sans-serif" fill="currentColor">OBJ</text></svg>
+            <span>OBJ</span>
+          </button>
+          <button class="tool-btn" id="btnExportGltf" title="Esporta solidi 3D in glTF">
+            <svg viewBox="0 0 32 32"><polygon points="6,12 16,6 26,12 26,24 16,30 6,24" fill="none"/><text x="8" y="22" font-size="8" font-family="sans-serif" fill="currentColor">glTF</text></svg>
+            <span>glTF</span>
+          </button>
+        </div>
+        <div class="panel-title">Esporta 3D</div>
+      </div>
+    </div>
+
+    <!-- OUTPUT -->
+    <div class="ribbon-page" data-page="output">
+      <div class="panel">
+        <div class="panel-body">
+          <button class="tool-btn" id="btnExportPng">
+            <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" fill="none"/><text x="6" y="17" font-size="9" font-family="sans-serif" fill="currentColor">PNG</text></svg>
+            <span>PNG</span>
+          </button>
+          <button class="tool-btn" id="btnExportSvg">
+            <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" fill="none"/><text x="6" y="17" font-size="9" font-family="sans-serif" fill="currentColor">SVG</text></svg>
+            <span>SVG</span>
+          </button>
+          <button class="tool-btn" id="btnExportDxf">
+            <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" fill="none"/><text x="6" y="17" font-size="9" font-family="sans-serif" fill="currentColor">DXF</text></svg>
+            <span>DXF</span>
+          </button>
+        </div>
+        <div class="panel-title">Esporta</div>
+      </div>
+      <div class="panel">
+        <div class="panel-body">
+          <button class="tool-btn" id="btnPrint">
+            <svg viewBox="0 0 24 24"><rect x="5" y="9" width="14" height="8" fill="none"/><rect x="7" y="4" width="10" height="5" fill="none"/><rect x="7" y="14" width="10" height="6" fill="none"/></svg>
+            <span>Stampa</span>
+          </button>
+        </div>
+        <div class="panel-title">Stampa</div>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<main class="workspace">
+  <aside class="side-left" id="sideLeft">
+    <div class="side-section">
+      <div class="side-header">
+        <span>Progetti</span>
+        <button id="btnRefreshProjects" title="Aggiorna">&#x21BB;</button>
+      </div>
+      <div class="side-body" id="projectList">
+        <div class="empty">Connessione al server...</div>
+      </div>
+    </div>
+  </aside>
+
+  <section class="canvas-area">
+    <canvas id="cad" tabindex="0"></canvas>
+    <div id="canvas3d-host" class="canvas3d-host" hidden></div>
+    <div class="ucs-icon" id="ucsIcon">
+      <svg viewBox="0 0 80 80">
+        <line x1="10" y1="60" x2="60" y2="60" stroke="#e74c3c" stroke-width="2"/>
+        <polygon points="60,60 53,57 53,63" fill="#e74c3c"/>
+        <text x="64" y="64" font-size="12" fill="#e74c3c" font-family="sans-serif">X</text>
+        <line x1="10" y1="60" x2="10" y2="10" stroke="#2ecc71" stroke-width="2"/>
+        <polygon points="10,10 7,17 13,17" fill="#2ecc71"/>
+        <text x="2" y="8" font-size="12" fill="#2ecc71" font-family="sans-serif">Y</text>
+      </svg>
+    </div>
+    <div class="viewcube" id="viewcube">
+      <div class="vc-face vc-top"    data-view="top">TOP</div>
+      <div class="vc-face vc-front"  data-view="front">FRONT</div>
+      <div class="vc-face vc-right"  data-view="right">RIGHT</div>
+      <div class="vc-face vc-iso"    data-view="iso">ISO</div>
+    </div>
+    <div class="tooltip-coord" id="cursorTip"></div>
+    <div class="mode-badge" id="modeBadge">2D</div>
+  </section>
+
+  <aside class="side-right" id="sideRight">
+    <div class="side-section">
+      <div class="side-header"><span>Proprietà</span></div>
+      <div class="side-body" id="propertiesPanel">
+        <div class="empty">Nessuna selezione</div>
+      </div>
+    </div>
+    <div class="side-section">
+      <div class="side-header">
+        <span>Layer</span>
+        <button id="btnAddLayer" title="Nuovo layer">+</button>
+      </div>
+      <div class="side-body" id="layersPanel"></div>
+    </div>
+  </aside>
+</main>
+
+<section class="command-area">
+  <div class="cmd-history" id="cmdHistory"></div>
+  <div class="cmd-input-row">
+    <span class="cmd-prompt" id="cmdPrompt">Comando:</span>
+    <input type="text" id="cmdInput" autocomplete="off" spellcheck="false" autofocus>
+  </div>
+</section>
+
+<footer class="statusbar">
+  <div class="coords" id="coords">0.0000, 0.0000, 0.0000</div>
+  <div class="status-toggles">
+    <button class="st-btn active" id="stGrid" title="Griglia (F7)">GRID</button>
+    <button class="st-btn active" id="stSnap" title="Snap griglia (F9)">SNAP</button>
+    <button class="st-btn" id="stOrtho" title="Orto (F8)">ORTHO</button>
+    <button class="st-btn" id="stPolar" title="Polare (F10)">POLAR</button>
+    <button class="st-btn active" id="stOsnap" title="Object snap (F3)">OSNAP</button>
+    <button class="st-btn" id="stOtrack" title="Tracking (F11)">OTRACK</button>
+    <button class="st-btn" id="stLwt" title="Spessori">LWT</button>
+    <button class="st-btn" id="stDyn" title="Input dinamico (F12)">DYN</button>
+  </div>
+  <div class="status-right">
+    <span id="modelTab" class="tab-pill active">Modello</span>
+    <span class="tab-pill">Layout1</span>
+    <span class="tab-pill">Layout2</span>
+    <span class="zoom-info" id="zoomInfo">100%</span>
+  </div>
+</footer>
+
+<!-- Modali -->
+<div class="modal-bg" id="modalBg" hidden>
+  <div class="modal" id="modal">
+    <div class="modal-header">
+      <span id="modalTitle">Titolo</span>
+      <button class="modal-close" id="modalClose">&times;</button>
+    </div>
+    <div class="modal-body" id="modalBody"></div>
+    <div class="modal-foot" id="modalFoot"></div>
+  </div>
+</div>
+
+<input type="file" id="fileInput" hidden accept=".dxf,.json,.wcad">
+
+<script src="js/core/utils.js"></script>
+<script src="js/core/geom.js"></script>
+<script src="js/core/camera.js"></script>
+<script src="js/entities/entity.js"></script>
+<script src="js/entities/line.js"></script>
+<script src="js/entities/polyline.js"></script>
+<script src="js/entities/circle.js"></script>
+<script src="js/entities/arc.js"></script>
+<script src="js/entities/rectangle.js"></script>
+<script src="js/entities/ellipse.js"></script>
+<script src="js/entities/point.js"></script>
+<script src="js/entities/text.js"></script>
+<script src="js/entities/dimension.js"></script>
+<script src="js/core/layer.js"></script>
+<script src="js/core/document.js"></script>
+<script src="js/core/snap.js"></script>
+<script src="js/core/history.js"></script>
+<script src="js/core/renderer.js"></script>
+<script src="js/tools/tool.js"></script>
+<script src="js/tools/select.js"></script>
+<script src="js/tools/draw-tools.js"></script>
+<script src="js/tools/modify-tools.js"></script>
+<script src="js/tools/3d-tools.js"></script>
+<script src="js/3d/csg.js"></script>
+<script src="js/io/exporters.js"></script>
+<script src="js/io/dxf.js"></script>
+<script src="js/io/api.js"></script>
+<script src="js/io/autosave.js"></script>
+<script src="js/3d/scene3d.js"></script>
+<script src="js/3d/exporters3d.js"></script>
+<script src="js/ui/theme.js"></script>
+<script src="js/ui/ui.js"></script>
+<script src="js/ui/command-line.js"></script>
+<script src="js/core/app.js"></script>
+</body>
+</html>

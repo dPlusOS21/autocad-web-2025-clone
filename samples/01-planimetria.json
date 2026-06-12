@@ -1,0 +1,49 @@
+{
+  "name": "Esempio - Planimetria appartamento",
+  "currentLayer": "MURI",
+  "layers": [
+    { "name": "0",       "color": "#cccccc", "visible": true, "locked": false, "lineType": "CONTINUOUS", "lineWeight": 0 },
+    { "name": "MURI",    "color": "#ffffff", "visible": true, "locked": false, "lineType": "CONTINUOUS", "lineWeight": 0.5 },
+    { "name": "INFISSI", "color": "#3498db", "visible": true, "locked": false, "lineType": "CONTINUOUS", "lineWeight": 0.3 },
+    { "name": "ARREDO",  "color": "#2ecc71", "visible": true, "locked": false, "lineType": "CONTINUOUS", "lineWeight": 0 },
+    { "name": "QUOTE",   "color": "#f1c40f", "visible": true, "locked": false, "lineType": "CONTINUOUS", "lineWeight": 0 }
+  ],
+  "entities": [
+    { "id": "p_001", "type": "polyline", "layer": "MURI", "color": "#bylayer", "lineType": "BYLAYER", "lineWeight": 0,
+      "points": [
+        { "x": 0, "y": 0 }, { "x": 800, "y": 0 }, { "x": 800, "y": 600 },
+        { "x": 0, "y": 600 }
+      ], "closed": true },
+    { "id": "p_002", "type": "line", "layer": "MURI", "color": "#bylayer", "lineType": "BYLAYER", "lineWeight": 0,
+      "p1": { "x": 400, "y": 0 }, "p2": { "x": 400, "y": 600 } },
+    { "id": "p_003", "type": "line", "layer": "MURI", "color": "#bylayer", "lineType": "BYLAYER", "lineWeight": 0,
+      "p1": { "x": 0, "y": 350 }, "p2": { "x": 400, "y": 350 } },
+    { "id": "p_004", "type": "rectangle", "layer": "INFISSI", "color": "#bylayer", "lineType": "BYLAYER", "lineWeight": 0,
+      "p1": { "x": 60, "y": -5 }, "p2": { "x": 160, "y": 5 } },
+    { "id": "p_005", "type": "rectangle", "layer": "INFISSI", "color": "#bylayer", "lineType": "BYLAYER", "lineWeight": 0,
+      "p1": { "x": 540, "y": 595 }, "p2": { "x": 720, "y": 605 } },
+    { "id": "p_006", "type": "arc", "layer": "INFISSI", "color": "#bylayer", "lineType": "BYLAYER", "lineWeight": 0,
+      "center": { "x": 230, "y": 350 }, "radius": 80, "startAngle": 0, "endAngle": 1.5707963 },
+    { "id": "p_007", "type": "rectangle", "layer": "ARREDO", "color": "#bylayer", "lineType": "BYLAYER", "lineWeight": 0,
+      "p1": { "x": 50, "y": 400 }, "p2": { "x": 350, "y": 560 } },
+    { "id": "p_008", "type": "rectangle", "layer": "ARREDO", "color": "#bylayer", "lineType": "BYLAYER", "lineWeight": 0,
+      "p1": { "x": 450, "y": 50 }, "p2": { "x": 750, "y": 200 } },
+    { "id": "p_009", "type": "circle", "layer": "ARREDO", "color": "#bylayer", "lineType": "BYLAYER", "lineWeight": 0,
+      "center": { "x": 600, "y": 400 }, "radius": 60 },
+    { "id": "p_010", "type": "text", "layer": "ARREDO", "color": "#ffffff", "lineType": "BYLAYER", "lineWeight": 0,
+      "position": { "x": 100, "y": 480 }, "text": "Soggiorno", "height": 25, "rotation": 0, "align": "left" },
+    { "id": "p_011", "type": "text", "layer": "ARREDO", "color": "#ffffff", "lineType": "BYLAYER", "lineWeight": 0,
+      "position": { "x": 100, "y": 200 }, "text": "Camera", "height": 25, "rotation": 0, "align": "left" },
+    { "id": "p_012", "type": "text", "layer": "ARREDO", "color": "#ffffff", "lineType": "BYLAYER", "lineWeight": 0,
+      "position": { "x": 500, "y": 250 }, "text": "Cucina", "height": 25, "rotation": 0, "align": "left" },
+    { "id": "p_013", "type": "text", "layer": "ARREDO", "color": "#ffffff", "lineType": "BYLAYER", "lineWeight": 0,
+      "position": { "x": 530, "y": 480 }, "text": "Bagno", "height": 25, "rotation": 0, "align": "left" },
+    { "id": "p_014", "type": "dimension", "layer": "QUOTE", "color": "#f1c40f", "lineType": "BYLAYER", "lineWeight": 0,
+      "p1": { "x": 0, "y": 0 }, "p2": { "x": 800, "y": 0 }, "offset": { "x": 400, "y": -60 },
+      "kind": "horizontal", "textHeight": 20 },
+    { "id": "p_015", "type": "dimension", "layer": "QUOTE", "color": "#f1c40f", "lineType": "BYLAYER", "lineWeight": 0,
+      "p1": { "x": 800, "y": 0 }, "p2": { "x": 800, "y": 600 }, "offset": { "x": 880, "y": 300 },
+      "kind": "vertical", "textHeight": 20 }
+  ],
+  "solids": []
+}

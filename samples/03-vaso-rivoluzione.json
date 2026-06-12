@@ -1,0 +1,47 @@
+{
+  "name": "Esempio - Vaso (rivoluzione)",
+  "currentLayer": "PROFILE",
+  "layers": [
+    { "name": "0",       "color": "#cccccc", "visible": true, "locked": false, "lineType": "CONTINUOUS", "lineWeight": 0 },
+    { "name": "PROFILE", "color": "#9ece6a", "visible": true, "locked": false, "lineType": "CONTINUOUS", "lineWeight": 0 }
+  ],
+  "entities": [
+    { "id": "e_001", "type": "polyline", "layer": "PROFILE", "color": "#9ece6a", "lineType": "BYLAYER", "lineWeight": 0,
+      "points": [
+        { "x": 0,  "y": 0 },
+        { "x": 30, "y": 0 },
+        { "x": 32, "y": 5 },
+        { "x": 35, "y": 15 },
+        { "x": 40, "y": 30 },
+        { "x": 45, "y": 50 },
+        { "x": 42, "y": 65 },
+        { "x": 35, "y": 75 },
+        { "x": 30, "y": 78 },
+        { "x": 28, "y": 80 },
+        { "x": 30, "y": 82 },
+        { "x": 0,  "y": 82 }
+      ], "closed": false }
+  ],
+  "solids": [
+    { "id": "v_001", "kind": "revolve", "layer": "PROFILE", "color": "#9ece6a", "height": 0,
+      "params": {
+        "axis": "Y",
+        "angleDeg": 360,
+        "points": [
+          { "x": 0,  "y": 0 },
+          { "x": 30, "y": 0 },
+          { "x": 32, "y": 5 },
+          { "x": 35, "y": 15 },
+          { "x": 40, "y": 30 },
+          { "x": 45, "y": 50 },
+          { "x": 42, "y": 65 },
+          { "x": 35, "y": 75 },
+          { "x": 30, "y": 78 },
+          { "x": 28, "y": 80 },
+          { "x": 30, "y": 82 },
+          { "x": 0,  "y": 82 }
+        ]
+      }
+    }
+  ]
+}

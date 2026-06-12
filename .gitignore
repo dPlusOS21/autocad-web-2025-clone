@@ -1,0 +1,30 @@
+# Database SQLite runtime
+data/
+*.db
+*.sqlite
+*.sqlite3
+
+# Log e file temporanei
+*.log
+tmp/
+.tmp/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor / IDE
+.vscode/
+.idea/
+*.swp
+*~
+
+# Node / build (non usati ma per sicurezza)
+node_modules/
+dist/
+build/
+.cache/
+
+# Backup
+*.bak
+*.orig

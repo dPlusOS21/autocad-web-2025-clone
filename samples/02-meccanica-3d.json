@@ -1,0 +1,28 @@
+{
+  "name": "Esempio - Componenti meccanici 3D",
+  "currentLayer": "0",
+  "layers": [
+    { "name": "0",     "color": "#cccccc", "visible": true, "locked": false, "lineType": "CONTINUOUS", "lineWeight": 0 },
+    { "name": "BODY",  "color": "#7aa2f7", "visible": true, "locked": false, "lineType": "CONTINUOUS", "lineWeight": 0 },
+    { "name": "DETAIL","color": "#f7768e", "visible": true, "locked": false, "lineType": "CONTINUOUS", "lineWeight": 0 }
+  ],
+  "entities": [],
+  "solids": [
+    { "id": "s_001", "kind": "prim-box", "layer": "BODY", "color": "#7aa2f7", "height": 12,
+      "params": { "w": 80, "d": 50, "h": 12, "cx": 0, "cy": 0, "z": 0 } },
+    { "id": "s_002", "kind": "prim-cylinder", "layer": "DETAIL", "color": "#f7768e", "height": 35,
+      "params": { "r": 14, "h": 35, "cx": 0, "cy": 0, "z": 12 } },
+    { "id": "s_003", "kind": "prim-cylinder", "layer": "DETAIL", "color": "#f7768e", "height": 30,
+      "params": { "r": 4, "h": 30, "cx": -28, "cy": -15, "z": 12 } },
+    { "id": "s_004", "kind": "prim-cylinder", "layer": "DETAIL", "color": "#f7768e", "height": 30,
+      "params": { "r": 4, "h": 30, "cx": 28, "cy": -15, "z": 12 } },
+    { "id": "s_005", "kind": "prim-cylinder", "layer": "DETAIL", "color": "#f7768e", "height": 30,
+      "params": { "r": 4, "h": 30, "cx": -28, "cy": 15, "z": 12 } },
+    { "id": "s_006", "kind": "prim-cylinder", "layer": "DETAIL", "color": "#f7768e", "height": 30,
+      "params": { "r": 4, "h": 30, "cx": 28, "cy": 15, "z": 12 } },
+    { "id": "s_007", "kind": "prim-sphere", "layer": "BODY", "color": "#f7d168", "height": 12,
+      "params": { "r": 12, "cx": 0, "cy": 0, "z": 47 } },
+    { "id": "s_008", "kind": "prim-torus", "layer": "DETAIL", "color": "#bb9af7", "height": 4,
+      "params": { "R": 22, "r": 4, "cx": 0, "cy": 0, "z": 14 } }
+  ]
+}
