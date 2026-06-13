@@ -5,7 +5,10 @@ class Camera {
   constructor() {
     this.x = 0;          // centro vista world
     this.y = 0;
-    this.zoom = 50;      // pixel per unità world
+    /* Scala 1:1 reale: 1 unità (= 1 mm) occupa PX_PER_MM pixel sullo schermo.
+       A questo zoom il disegno è a grandezza naturale (100%). */
+    this.scale1to1 = Utils.PX_PER_MM; // pixel per unità world a scala 1:1
+    this.zoom = this.scale1to1;       // pixel per unità world (default = 100% reale)
     this.minZoom = 0.001;
     this.maxZoom = 100000;
     this.viewW = 1;
@@ -41,7 +44,7 @@ class Camera {
 
   zoomExtents(bbox, padding = 0.1) {
     if (!bbox || bbox.w <= 0 || bbox.h <= 0) {
-      this.x = 0; this.y = 0; this.zoom = 50;
+      this.x = 0; this.y = 0; this.zoom = this.scale1to1;
       return;
     }
     const pad = 1 + padding * 2;
@@ -56,6 +59,6 @@ class Camera {
   worldLen(u) { return u * this.zoom; }
   screenLen(p) { return p / this.zoom; }
 
-  /* Stato per UI */
-  zoomPct() { return Math.round(this.zoom * 100 / 50); }
+  /* Stato per UI: 100% = scala 1:1 reale (1 mm disegnato = 1 mm sullo schermo) */
+  zoomPct() { return Math.round(this.zoom * 100 / this.scale1to1); }
 }

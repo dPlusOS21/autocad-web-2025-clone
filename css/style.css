@@ -486,6 +486,13 @@ button { font-family: inherit; color: inherit; }
   color: var(--fg-1);
   min-width: 220px;
 }
+.units-info {
+  font-family: "Consolas", monospace;
+  color: var(--fg-2);
+  padding: 0 8px;
+  border-left: 1px solid var(--border, #444);
+  align-self: center;
+}
 .status-toggles { display: flex; gap: 2px; flex: 1; }
 .st-btn {
   background: transparent; border: 1px solid transparent;

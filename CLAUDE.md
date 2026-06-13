@@ -62,6 +62,17 @@ vendor/
 
 `scene3d.js::ensureThreeJsLoaded()` fa il `import('three')` lazy al primo uso del 3D.
 
+## Unità di misura (misure reali)
+
+- **1 unità di disegno = 1 millimetro** (convenzione esplicita, coerente con DXF
+  `$INSUNITS = 4` e con lo spessore linea LWT in mm).
+- La scala 1:1 reale è definita da `Utils.PX_PER_MM = 96 / 25.4` (≈ 3,78 px/mm,
+  riferimento CSS 96 DPI). `Camera.scale1to1` usa questo valore: a **zoom 100%**
+  1 mm disegnato = 1 mm fisico sullo schermo (entro la precisione del browser/monitor).
+- `Camera.zoomPct()` è relativo a `scale1to1` (100% = 1:1 reale), non più al valore
+  arbitrario 50 px/unità di prima.
+- Non reintrodurre `zoom = 50` come riferimento: usare `this.scale1to1` / `Utils.PX_PER_MM`.
+
 ## Modello dati (CadDocument.toJSON)
 
 ```jsonc

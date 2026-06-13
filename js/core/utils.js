@@ -1,5 +1,12 @@
 /* Utility globali */
 const Utils = {
+  /* ===== Unità di misura reali =====
+     1 unità di disegno = 1 millimetro (coerente con DXF $INSUNITS=4 e LWT in mm).
+     PX_PER_MM: pixel CSS per 1 mm fisico (riferimento standard 96 DPI → 96/25.4).
+     A questo valore di zoom la vista è in scala 1:1 reale: 1 mm disegnato = 1 mm
+     sullo schermo (con la precisione consentita dal browser/monitor). */
+  MM_PER_UNIT: 1,
+  PX_PER_MM: 96 / 25.4, // ≈ 3.7795275591
   uid() {
     return 'e' + Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
   },
