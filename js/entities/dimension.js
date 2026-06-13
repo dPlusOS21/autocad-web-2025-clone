@@ -67,7 +67,7 @@ class DimensionEntity extends Entity {
     drawArrow(sB, 1);
     /* testo */
     const dist = this._measure();
-    const label = Utils.fmt(dist, 2);
+    const label = `${Utils.fmt(dist, 2)} mm`;
     const mid = { x: (sA.x + sB.x) / 2, y: (sA.y + sB.y) / 2 };
     ctx.save();
     ctx.translate(mid.x, mid.y);
