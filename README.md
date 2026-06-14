@@ -4,6 +4,8 @@ Clone web di AutoCAD 2025 (2D + 3D). Interfaccia ribbon con tema
 chiaro/scuro, canvas HTML5, workspace 3D opzionale via Three.js
 (distribuito in locale), backend PHP + SQLite per la persistenza.
 
+🚀 **Demo live** (2D + 3D, gira interamente nel browser): **https://thecloners21.github.io/autocad-web-2025-clone/**
+
 > 📖 **Manuale d'uso completo**: [USER_GUIDE.md](USER_GUIDE.md)
 
 ## Caratteristiche
